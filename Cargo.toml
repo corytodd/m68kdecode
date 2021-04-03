@@ -5,3 +5,11 @@ authors = ["Andreas Fredriksson <deplinenoise@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+
+[lib]
+name = "m68kdecode"
+path = "src/lib.rs"
+
+[[bin]]
+name = "m68kdecodec"
+path = "src/bin.rs"
