@@ -194,7 +194,7 @@ static int compare_operands(const m68k_operand* lhs, const m68k_operand *rhs)
 }
 
 /// Compare two instructions, equivalent to memcmp()
-int m68k_compare_instructions(const m68k_instruction* lhs, const m68k_instruction *rhs)
+M68DECODE_EXPORT int m68k_compare_instructions(const m68k_instruction* lhs, const m68k_instruction *rhs)
 {
   CMP2(size);
   CMP2(operation);
@@ -267,7 +267,7 @@ static void print_operand(FILE *stream, const m68k_operand *i)
   fprintf(stream, ")");
 }
 
-void m68k_print_instruction(FILE *stream, const m68k_instruction *i)
+M68DECODE_EXPORT void m68k_print_instruction(FILE *stream, const m68k_instruction *i)
 {
   fprintf(stream, "%s ", m68k_operation_names[i->operation]);
 

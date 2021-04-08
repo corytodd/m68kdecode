@@ -38,7 +38,7 @@ with open(infilename, 'r') as f:
                 cpu = l[2:]
             else:
                 stderr.write('bad input line: {}'.format(l))
-        
+
         if len(asm_lines) > 0 and len(result_lines) > 0:
             with open('test.asm', 'w') as of:
                 of.write('start:\n')
@@ -46,7 +46,7 @@ with open(infilename, 'r') as f:
                     of.write('\t')
                     of.write(line)
                     of.write('\n')
-            
+
             if subprocess.call([vasm, '-m' + cpu, 'test.asm', '-quiet', '-Fbin', '-o', 'test.out']) != 0:
                 sys.stderr.write('vasm failed for:')
                 for l in asm_lines:
@@ -58,7 +58,7 @@ with open(infilename, 'r') as f:
                     tests.append((code_bytes, result_lines, asm_lines))
 
 
-    
+
 with open(outfilename, "w") as of:
     of.write('// auto-generated from decoding_tests.txt by gen_decoding_tests.py\n')
     of.write('#include "lib.h"\n')
@@ -124,5 +124,5 @@ with open(outfilename, "w") as of:
 os.remove('test.asm')
 os.remove('test.out')
 
-if subprocess.call(['astyle', '-q', '-n', '--style=kr', outfilename]) != 0:
-    sys.exit(1)
+#if subprocess.call(['astyle', '-q', '-n', '--style=kr', outfilename]) != 0:
+#    sys.exit(1)

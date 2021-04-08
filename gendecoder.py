@@ -81,7 +81,7 @@ def analyze_mask(mask):
         else:
             prev_capture = ch
             captures.append(Capture(ch, bit, 1))
-            
+
     return (out_mask, out_insn, captures)
 
 instructions = []
@@ -136,7 +136,7 @@ def gen_decoders(of, insns):
     groups = split_by_length(insns)
 
     for lgroup in groups:
-        
+
         mlen = len(lgroup[0].masks) - 1
 
         if mlen > 0:
@@ -201,13 +201,13 @@ with open(outfile_h, "w") as of:
     of.write('/// Instruction names.\n');
     of.write('typedef enum m68k_operation {\n');
     for i in instructions:
-        if not seen_insn_names.has_key(i.name):
+        if i.name not in seen_insn_names:
             seen_insn_names[i.name] = True
             of.write('  M68K_{},\n'.format(i.name))
     of.write('} m68k_operation;\n');
     of.write('/// Instruction name strings.\n');
     of.write('extern const char *m68k_operation_names[];\n');
-    
+
 with open(outfile_c, "w") as of:
     of.write('#include "{}"\n'.format(outfile_h));
     of.write('#include "decoder_support.inl"\n')
@@ -217,7 +217,7 @@ with open(outfile_c, "w") as of:
     of.write('const char *m68k_operation_names[] = {\n');
     seen_insn_names = {}
     for i in instructions:
-        if not seen_insn_names.has_key(i.name):
+        if i.name not in seen_insn_names:
             seen_insn_names[i.name] = True
             of.write('  "{}",\n'.format(i.name))
     of.write('};\n');
@@ -236,7 +236,7 @@ with open(outfile_c, "w") as of:
     of.write('  uint16_t w0 = pull16(&cs);\n')
     of.write('  switch(w0 >> 12) {\n')
     for group in range(0, 16):
-        if not has_group.has_key(group):
+        if group not in has_group:
             continue
         of.write('    case 0x{0:02x}: return decode_group_{0:04b}(w0, &cs, result);\n'.format(group))
     of.write('    default: return M68K_NOT_IMPLEMENTED;\n')
@@ -244,6 +244,6 @@ with open(outfile_c, "w") as of:
 
     of.write('}\n')
 
-for fn in (outfile_c, outfile_h):
-    if subprocess.call(['astyle', '-q', '-n', '--style=kr', fn]) != 0:
-        sys.exit(1)
+#for fn in (outfile_c, outfile_h):
+    #if subprocess.call(['astyle', '-q', '-n', '--style=kr', fn]) != 0:
+        #sys.exit(1)

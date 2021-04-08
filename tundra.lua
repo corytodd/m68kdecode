@@ -5,7 +5,11 @@ local common = {
     -- Global, shared environment settings can go here
     CPPPATH = { ".", "$(OBJECTDIR)", "src" },
     --VASM = "../vasm/vasmm68k_mot_win32.exe",
-    VASM = native.getenv('VASM'),
+    --VASM = native.getenv('VASM'),
+    VASM = "H:/dotnet/MegaDrive/tools/vasmm68k_mot_win32.exe",
+    CPPDEFS = {
+      { "SHARED"; Config = "*-*-*-shared" }
+    },
   },
   Defines = {
     { "_DEBUG"; Config = '*-*-debug' },
@@ -24,6 +28,7 @@ local win64 = {
       "/wd4820", -- 'n' bytes padding added after data member 'foo'
       "/wd4710", -- 'foo': function not inlined
       "/wd4711", -- 'foo': selected for automatic inline expansion
+      "/INCREMENTAL:NO", -- 'ILT makes P/Invoke hard'
       { "/Od"; Config = "*-*-debug" },
       { "/O2"; Config = "*-*-production" },
       { "/Ox"; Config = "*-*-release" },
@@ -122,7 +127,7 @@ Build {
       end,
     }
 
-    local lib = StaticLibrary {
+    local lib = SharedLibrary {
       Name = "m68kdecode",
       Sources = {
         GenDecoder {},
@@ -142,7 +147,7 @@ Build {
     }
 
     Default(lib)
-    Default(dectest)
+    -- Default(dectest)
   end,
 }
 

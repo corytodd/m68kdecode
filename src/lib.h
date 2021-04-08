@@ -6,6 +6,16 @@
 #include <stdio.h>
 #include "decoder.h"
 
+# if defined(_MSC_VER)
+#  define M68DECODE_EXPORT __declspec(dllexport)
+# elif defined(__GNUC__)
+#  define M68DECODE_EXPORT __attribute__((visibility("default")))
+# endif
+
+#ifndef M68DECODE_EXPORT
+#define M68DECODE_EXPORT
+#endif
+
 /// Indicates how memory indexing is to be performed for 68020+ double memory operands.
 typedef enum m68k_memind {
   /// No memory indirection.
@@ -380,10 +390,13 @@ typedef enum m68k_decoding_error {
 
 
 /// Attempt to decode a single M68000 instruction starting at the specified byte
-m68k_decoding_error m68k_decode(const uint8_t *code, uint32_t max_bytes, m68k_decoded_instruction *result);
+M68DECODE_EXPORT m68k_decoding_error m68k_decode(const uint8_t *code, uint32_t max_bytes, m68k_decoded_instruction *result);
+
+/// Attempt to decode a single M68000 instruction starting at the specified byte
+M68DECODE_EXPORT m68k_decoding_error m68k_decodex(const uint8_t *code, uint32_t offset, uint32_t max_bytes, m68k_decoded_instruction *result);
 
 /// Compare two instructions, equivalent to memcmp()
-int m68k_compare_instructions(const m68k_instruction* lhs, const m68k_instruction *rhs);
+M68DECODE_EXPORT int m68k_compare_instructions(const m68k_instruction* lhs, const m68k_instruction *rhs);
 
 /// Print an instruction.
-void m68k_print_instruction(FILE *stream, const m68k_instruction *i);
+M68DECODE_EXPORT void m68k_print_instruction(FILE *stream, const m68k_instruction *i);
